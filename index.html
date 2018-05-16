@@ -22,7 +22,22 @@
 <script src="hammer.min.js"></script>
 <script>
     // 先要对监听的DOM进行一些初始化
-    var hammer = new Hammer(document.getElementById('box'));
+    var hammer = new Hammer(document.getElementById('box'), {
+        recognizers: [
+            // RecognizerClass, [options], [recognizeWith, ...], [requireFailure, ...]
+            [Hammer.Rotate],
+            [Hammer.Pinch, { enable: false }, ['rotate']],
+            [Hammer.Swipe,{ direction: Hammer.DIRECTION_HORIZONTAL }],
+        ]
+    });
+    //为该dom元素指定触屏移动事件
+    hammer.add(new Hammer.Pinch());
+    //添加事件
+    hammertime.on("pinchin", function (e) {
+        document.getElementById("result").innerHTML += "捏合初触发<br />";
+        //控制台输出
+        console.log(e);
+    });
     hammer.on("pinch", function(ev) {
         console.log(ev.scale);
         document.getElementById('p1').innerHTML = ev.scale;
